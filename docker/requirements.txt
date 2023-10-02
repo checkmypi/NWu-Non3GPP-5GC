@@ -1,0 +1,6 @@
+serial
+smartcard
+requests
+cryptography
+pycryptodome
+pyscard
