@@ -4,3 +4,5 @@ requests
 cryptography
 pycryptodome
 pyscard
+cryptomobile @ git+https://github.com/mitshell/CryptoMobile.git
+card @ git+https://github.com/mitshell/card.git
