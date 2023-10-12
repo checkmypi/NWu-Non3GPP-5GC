@@ -480,6 +480,8 @@ ROLE_RESPONDER = 0
 #5GS mobile_identity (underscore variables are not imported (from gNAS import *))
 _5GS_MOBILE_IDENTITY_IE_TYPE_OF_IDENTITY__SUCI = 1
 
+# Buffer size
+RCV_BUFF=5000
 
 class nwu_swu():
 
@@ -2236,7 +2238,7 @@ class nwu_swu():
             read_sockets, write_sockets, error_sockets = select.select(socket_list, [], [])
             for sock in read_sockets:
                 if sock == self.socket_nat:
-                    packet, address = self.socket_nat.recvfrom(2000)
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)
                     
                     if encr_alg is not None or integ_alg is not None:
                         if packet[0:4] == b'\x00\x00\x00\x00': #is ike message
@@ -2300,7 +2302,7 @@ class nwu_swu():
                                         
                         
                 elif sock == self.socket_esp:
-                    packet, address = self.socket_esp.recvfrom(2000)
+                    packet, address = self.socket_esp.recvfrom(RCV_BUFF)
                     if encr_alg is not None or integ_alg is not None:
                         if packet[20:24] == spi_init: #signaling SA CHILD for NWU or userplane for SWU
                             
@@ -2910,12 +2912,12 @@ class nwu_swu():
         #if True:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.AUTH_SA_INIT_received_packet = packet #needed for AUTH check in state 4
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break                
                 else:                 
-                    packet, address = self.socket_nat.recvfrom(2000)    
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)    
                     self.AUTH_SA_INIT_received_packet = packet[4:] #needed for AUTH check in state 4                    
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break                     
@@ -2999,11 +3001,11 @@ class nwu_swu():
         
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break                
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break                     
                 
@@ -3201,11 +3203,11 @@ class nwu_swu():
         try:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break                
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break                     
                 
@@ -3335,11 +3337,11 @@ class nwu_swu():
         try:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -3634,7 +3636,7 @@ class nwu_swu():
             for sock in read_sockets:
      
                 if sock == self.socket:                 
-                    packet, server_address = self.socket.recvfrom(2000)
+                    packet, server_address = self.socket.recvfrom(RCV_BUFF)
                     if server_address[0] == self.server_address[0]: #check server IP address. source port could be different than 500 or 4500, if it's a request reponse must be sent to the same port
                                   
                         self.decode_ike(packet)    
@@ -3714,11 +3716,11 @@ class nwu_swu():
         
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -3805,11 +3807,11 @@ class nwu_swu():
         #if True:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -4001,11 +4003,11 @@ class nwu_swu():
         #if True:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)
+                    packet, address = self.socket.recvfrom(RCV_BUFF)
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -4105,11 +4107,11 @@ class nwu_swu():
         #if True:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)
+                    packet, address = self.socket.recvfrom(RCV_BUFF)
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -4157,11 +4159,11 @@ class nwu_swu():
         #if True:
             while True:
                 if self.userplane_mode == ESP_PROTOCOL:
-                    packet, address = self.socket.recvfrom(2000)  
+                    packet, address = self.socket.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet)
                     if self.ike_decoded_ok == True: break
                 else:
-                    packet, address = self.socket_nat.recvfrom(2000)  
+                    packet, address = self.socket_nat.recvfrom(RCV_BUFF)  
                     self.decode_ike(packet[4:])
                     if self.ike_decoded_ok == True: break
                 
@@ -4375,7 +4377,7 @@ class nwu_swu():
      
                 if sock == self.socket:
                        
-                    packet, server_address = self.socket.recvfrom(2000)                    
+                    packet, server_address = self.socket.recvfrom(RCV_BUFF)                    
                     if server_address[0] == self.server_address[0]: #check server IP address. source port could be different than 500 or 4500, if it's a request reponse must be sent to the same port                                
                         self.decode_ike(packet) 
                         if self.ike_decoded_ok == True:                

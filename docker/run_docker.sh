@@ -1,5 +1,7 @@
 #!/bin/bash
 
-# This script should be executed from the directory that contains NWu-Non3GPP-5GC
+SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
+PARENT_DIR=$(dirname ${SCRIPT_DIR})
+PARENT_DIR=$(dirname ${PARENT_DIR})
 
-docker run -v $(pwd):/opt -it n3iwf-sim 
+docker run -v ${PARENT_DIR}:/opt -w /opt/NWu-Non3GPP-5GC -it n3iwf-sim 
