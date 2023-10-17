@@ -1,5 +1,8 @@
 #!/bin/bash
 
+[ ! -d /dev/net ] && mkdir /dev/net
+[ ! -c /dev/net/tun ] && mknod /dev/net/tun c 10 200
+
 MY_IP=$(ip -br a ls dev eth0 | awk '{print $3}' | awk -F"/" '{print $1}')
 
 CORE_IP=${1:-192.168.1.193}
